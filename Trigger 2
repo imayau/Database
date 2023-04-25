@@ -1,0 +1,14 @@
+create or replace TRIGGER trg_Place
+BEFORE INSERT ON Place
+FOR EACH ROW
+DECLARE
+   short_phone EXCEPTION;
+BEGIN 
+   IF LENGTH(:NEW.phone) < 5 THEN
+      RAISE short_phone;
+   END IF;
+EXCEPTION
+   WHEN short_phone THEN
+      raise_application_error(-20001, 'Phone number must be at least 5 characters long.');
+END;
+
