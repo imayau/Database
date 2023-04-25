@@ -1,0 +1,12 @@
+create or replace PROCEDURE delete_users
+    (p_user_id IN Users.user_id%TYPE)
+IS
+BEGIN
+    DELETE FROM Users WHERE user_id = p_user_id;
+    
+    IF SQL%ROWCOUNT > 0 THEN
+        DBMS_OUTPUT.PUT_LINE('Oh..'|| SQL%ROWCOUNT || ' row(s) deleted!:)');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('No rows deleted.');
+    END IF;
+END;
