@@ -1,0 +1,10 @@
+create or replace TRIGGER TRIGGET_T
+a)BEFORE INSERT ON tickets
+FOR EACH ROWDECLARE
+    num_rows INT;BEGIN
+    SELECT COUNT(*) INTO num_rows FROM tickets;
+END;    
+проверка
+INSERT INTO TICKETS VALUES(31, 8, 29, 'VIP Pass', 3000, '18/03/2023')declare cou  number; 
+begin    SELECT COUNT(*) INTO cou FROM tickets;
+    dbms_output.put_line(cou);end;
