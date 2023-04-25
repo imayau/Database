@@ -1,0 +1,26 @@
+create or replace PROCEDURE update_place(
+    p_place_id IN place.place_id%TYPE,
+    p_place_name IN place.place_name%TYPE,
+    p_address in place.address%TYPE,
+    p_phone in place.phone%TYPE
+)
+IS
+BEGIN
+    UPDATE place
+    SET place_name = p_place_name
+    WHERE place_id = p_place_id;
+    
+    IF SQL%ROWCOUNT = 1 THEN
+        DBMS_OUTPUT.PUT_LINE('Place updated successfully! New place name: ' || p_place_name || '.');
+    ELSIF SQL%ROWCOUNT = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('No place found with ID ' || p_place_id || '.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE(SQL%ROWCOUNT || ' rows updated.');
+    END IF;
+    
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
