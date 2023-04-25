@@ -1,0 +1,32 @@
+CREATE OR REPLACE FUNCTION get_top_events(
+    p_category_id IN NUMBER
+) RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR
+        SELECT e.event_name, COUNT(t.ticket_id) AS num_tickets_sold
+        FROM events e
+        JOIN tickets t ON e.event_id = t.event_id
+        JOIN categories c ON e.category_id = c.category_id
+        WHERE c.category_id = p_category_id
+        GROUP BY e.event_id, e.event_name
+        ORDER BY num_tickets_sold DESC
+        FETCH FIRST 5 ROWS ONLY;
+    RETURN v_cursor;
+END;
+
+
+DECLARE
+    v_cursor SYS_REFCURSOR;
+    v_event_name VARCHAR2(100);
+    v_num_tickets_sold NUMBER;
+BEGIN
+    v_cursor := get_top_events(1); -- replace 1 with the category ID you want to search for
+    LOOP
+        FETCH v_cursor INTO v_event_name, v_num_tickets_sold;
+        EXIT WHEN v_cursor%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE(v_event_name  ': '  v_num_tickets_sold || ' tickets sold');
+    END LOOP;
+    CLOSE v_cursor;
+END;
