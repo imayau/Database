@@ -1,0 +1,9 @@
+b)CREATE OR REPLACE TRIGGER PLACE_TBEFORE UPDATE ON PLACE
+FOR EACH ROWBEGIN
+  IF :NEW.place_name IS NULL OR LENGTH(TRIM(:NEW.place_name)) = 0 THEN    RAISE_APPLICATION_ERROR(-20001, 'The place name cannot be empty or null.');
+  END IF;END;
+
+
+
+UPDATE PLACESET place_name = '', address = 'dfg'
+WHERE place_id = 2;
