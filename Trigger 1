@@ -1,0 +1,15 @@
+create or replace TRIGGER trg_pass
+BEFORE INSERT OR UPDATE ON users
+FOR EACH ROW
+ DECLARE
+   short_password EXCEPTION;
+BEGIN
+   IF LENGTH(:NEW.password) < 5 THEN
+     RAISE short_password;
+     END IF;
+  EXCEPTION 
+  WHEN short_password THEN
+   raise_application_error(-20001,'Your password must be at least 5 characters long.');
+  WHEN others THEN
+  raise_application_error(-20001,'Error');
+END;
